@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // internal imports
 import { colors } from '../../assets/style-guide';
-import { SignInTab, InboxTab } from '../Screens/Tabs';
+import { SignInTab, InboxTab, LikedTab } from '../Screens/Tabs';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,34 +14,36 @@ const TabNavigator = ({ user }) => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.lightGray,
+        tabBarShowLabel: false,
       }}
     >
       {/* <Tab.Screen
-        name="Explore Tab"
+        name="Explore"
         component={ExploreTab}
         options={{ tabBarIcon: ({ color, size }) => (
           <Icon name="home-search-outline" size={size} color={color}/>
         )}}
-      />
-      <Tab.Screen
-        name="Liked Tab"
-        component={LikedTab}
-        options={{ tabBarIcon: ({ color, size }) => (
-          <Icon name="heart-outline" size={size} color={color}/>
-        )}}
       /> */}
       <Tab.Screen
-        name="Inbox Tab"
-        component={InboxTab}
-        options={{ tabBarIcon: ({ color, size }) => (
-          <Icon name="message-outline" size={size} color={color}/>
+        name="Liked"
+        component={LikedTab}
+        options={{ tabBarIcon: ({ color }) => (
+          <Icon name="heart-outline" size={25} color={color}/>
         )}}
       />
       <Tab.Screen
-        name={user ? "Profile Tab" : "Sign In"}
+        name="Inbox"
+        component={InboxTab}
+        options={{ tabBarIcon: ({ color }) => (
+          <Icon name="message-outline" size={25} color={color}/>
+        )}}
+      />
+      <Tab.Screen
+        name={user ? "Profile" : "Sign In"}
         component={user ? ProfileTab : SignInTab}
-        options={{ tabBarIcon: ({ color, size }) => (
-          <Icon name="account-outline" size={size} color={color}/>
+        options={{ tabBarIcon: ({ color }) => (
+          <Icon name="account-outline" size={25} color={color}/>
         )}}
       />
     </Tab.Navigator>
