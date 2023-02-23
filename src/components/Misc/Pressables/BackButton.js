@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { TouchableOpacity } from 'react-native';
 
 // internal imports
-import { colors } from '../../../assets/style-guide';
+import { colors } from '../../../../assets/style-guide';
 
 const BackButton = ({ style, onPress, useCross, size }) => (
   <TouchableOpacity onPress={onPress} style={style}>

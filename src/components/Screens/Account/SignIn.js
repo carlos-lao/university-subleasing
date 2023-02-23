@@ -11,7 +11,7 @@ import { Link, Button } from '../../Misc/Pressables';
 import { TextInput } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
-import { colors, font, dimensions } from '../../../assets/style-guide';
+import { colors, font, dimensions } from '../../../../assets/style-guide';
 
 // FIXME: alert on failed login
 const SignIn = ({ navigation }) => {

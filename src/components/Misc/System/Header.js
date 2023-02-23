@@ -2,7 +2,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 
 // internal imports
-import { colors, font } from '../../../assets/style-guide';
+import { colors, font } from '../../../../assets/style-guide';
 import { BackButton } from '../Pressables';
 
 const Header = ({ hr, title, modal, onPressBack, useCross, style }) => {

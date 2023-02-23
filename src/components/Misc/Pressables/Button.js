@@ -8,7 +8,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // internal imports
-import { colors, dimensions, font } from '../../../assets/style-guide';
+import { colors, dimensions, font } from '../../../../assets/style-guide';
 
 const Button = ({ style, onPress, containerStyle, title, textStyle, icon }) => (
   <TouchableOpacity onPress={onPress} style={style}>

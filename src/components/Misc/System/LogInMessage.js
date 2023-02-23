@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 // internal imports
 import { Button } from '../Pressables';
-import { font } from '../../../assets/style-guide';
+import { font } from '../../../../assets/style-guide';
 
 const LogInMessage = ({ title, children }) => {
   const navigation = useNavigation();

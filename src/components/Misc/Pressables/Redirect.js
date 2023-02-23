@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 // internal imports
-import { colors, font } from '../../../assets/style-guide';
+import { colors, font } from '../../../../assets/style-guide';
 
 const Redirect = ({ onPress, icon, title }) => (
   <View style={styles.container}>

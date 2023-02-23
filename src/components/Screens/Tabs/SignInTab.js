@@ -5,7 +5,7 @@ import { Text, StyleSheet } from 'react-native';
 import { Button, Link, Redirect } from '../../Misc/Pressables'
 import { Header } from '../../Misc/System';
 import { Container } from '../../Misc/Templates';
-import { colors, font } from '../../../assets/style-guide';
+import { colors, font } from '../../../../assets/style-guide';
 
 const SignInTab = ({ navigation }) => {
   return (

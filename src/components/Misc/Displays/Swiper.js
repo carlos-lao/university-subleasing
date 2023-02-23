@@ -9,7 +9,7 @@ import {
 import { Swiper as RNSwiper } from 'react-native-swiper';
 
 // internal imports
-import { colors, dimensions, font } from '../../../assets/style-guide';
+import { colors, dimensions, font } from '../../../../assets/style-guide';
 
 const numberedPagination = (idx, total) => {
   return (

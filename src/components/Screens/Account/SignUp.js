@@ -16,12 +16,12 @@ import {
 } from 'react-native';
 
 // internal imports
-import { colors, font, dimensions } from '../../../assets/style-guide';
+import { colors, font, dimensions } from '../../../../assets/style-guide';
 import { Button } from '../../Misc/Pressables';
 import { TextInput, Dropdown } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
-import { account, consts } from '../../../src/util';
+import { account, consts } from '../../../util';
 
 // constant
 const initialUserInfoState = {

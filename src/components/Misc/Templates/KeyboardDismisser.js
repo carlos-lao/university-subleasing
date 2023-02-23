@@ -8,7 +8,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // internal imports
-import { colors } from '../../../assets/style-guide';
+import { colors } from '../../../../assets/style-guide';
 
 const KeyboardDismisser = ({ children, safe }) => {
     const { top } = useSafeAreaInsets();

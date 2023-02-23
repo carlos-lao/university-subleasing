@@ -13,9 +13,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 
 // internal imports
-import { MONTHS, ROOM_TYPES } from '../../../src/util/constants';
-import { colors, dimensions, font } from '../../../assets/style-guide';
-import { listing } from '../../../src/util';
+import { MONTHS, ROOM_TYPES } from '../../../util/constants';
+import { colors, dimensions, font } from '../../../../assets/style-guide';
+import { listing } from '../../../util';
 import Swiper from './Swiper';
 
 const ListingSummary = ({ listingInfo, user, likeable }) => {

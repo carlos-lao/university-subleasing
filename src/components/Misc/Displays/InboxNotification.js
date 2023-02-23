@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 import { useNavigation } from '@react-navigation/native';
 
 // internal imports
-import { colors, font } from '../../../assets/style-guide';
+import { colors, font } from '../../../../assets/style-guide';
 
 const InboxNotification = ({ chat, comment }) => {
     const navigation = useNavigation();

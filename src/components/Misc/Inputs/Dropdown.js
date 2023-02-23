@@ -4,7 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { View, Text, StyleSheet } from 'react-native';
 
 // internal imports
-import { colors, font, dimensions } from '../../../assets/style-guide';
+import { colors, font, dimensions } from '../../../../assets/style-guide';
 
 DropDownPicker.setListMode("SCROLLVIEW");
 

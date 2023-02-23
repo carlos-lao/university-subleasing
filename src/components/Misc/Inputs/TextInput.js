@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 // internal imports
-import { colors, font, dimensions } from '../../../assets/style-guide';
+import { colors, font, dimensions } from '../../../../assets/style-guide';
 
 const TextInput = ({ label, labelStyle, style, toggleableSecurity, ...props }) => {
   const inputRef = useRef();

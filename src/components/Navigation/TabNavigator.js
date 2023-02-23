@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // internal imports
-import { colors } from '../../assets/style-guide';
+import { colors } from '../../../assets/style-guide';
 import { SignInTab, InboxTab, LikedTab } from '../Screens/Tabs';
 
 const Tab = createBottomTabNavigator();
