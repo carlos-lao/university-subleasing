@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // internal imports
 import { colors } from '../../../assets/style-guide';
-import { SignInTab, InboxTab, LikedTab } from '../Screens/Tabs';
+import { SignInTab, InboxTab, LikedTab, ExploreTab } from '../Screens/Tabs';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,13 +18,13 @@ const TabNavigator = ({ user }) => {
         tabBarShowLabel: false,
       }}
     >
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Explore"
         component={ExploreTab}
         options={{ tabBarIcon: ({ color, size }) => (
           <Icon name="home-search-outline" size={size} color={color}/>
         )}}
-      /> */}
+      />
       <Tab.Screen
         name="Liked"
         component={LikedTab}

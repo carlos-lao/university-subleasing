@@ -5,7 +5,7 @@ import { Amplify } from 'aws-amplify'
 import awsconfig from './src/aws-exports'
 
 // internal imports
-import { StackNavigator } from './components/Navigation';
+import { StackNavigator } from './src/components/Navigation';
 
 // additional dependencies
 import 'react-native-gesture-handler';

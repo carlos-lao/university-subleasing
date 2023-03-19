@@ -24,3 +24,5 @@ export const passwordReqts = [
     fulfilled: (password) => (/[\^\$\*\.\[\]\{\}\(\)\?\-"!@#\%\&\/\\,><':;\|_~`\+=)]/.test(password)),
   },
 ];
+
+// create user

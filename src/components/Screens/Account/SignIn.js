@@ -1,5 +1,6 @@
 // external imports
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -14,16 +15,18 @@ import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { colors, font, dimensions } from '../../../../assets/style-guide';
 
 // FIXME: alert on failed login
-const SignIn = ({ navigation }) => {
+const SignIn = () => {
   const [loginInfo, setLogInInfo] = useState({
     email: '',
     password: ''
   });
 
+  const nav = useNavigation();
+
   const handleSignIn = () => {
     const { email, password } = loginInfo;
 
-    navigation.goBack();
+    nav.goBack();
   }
 
   const renderDualTextInput = () => (
@@ -51,7 +54,7 @@ const SignIn = ({ navigation }) => {
       <Header
         modal
         useCross
-        onPressBack={navigation.goBack}
+        onPressBack={nav.goBack}
         title='Log in'
       />
       <Container style={styles.container}>
@@ -60,7 +63,7 @@ const SignIn = ({ navigation }) => {
         <Button style={styles.loginButton} title="Log in" onPress={handleSignIn} />
 
         {/* LogIn Assistance */}
-        <Text style={styles.signUp}>Don't have an account? <Link onPress={() => navigation.navigate('Sign Up')}>Sign up</Link></Text>
+        <Text style={styles.signUp}>Don't have an account? <Link onPress={() => nav.navigate('Sign Up')}>Sign up</Link></Text>
         <Link onPress={() => {}}>Forgot your password</Link>
 
         {/* Divider */}
@@ -77,7 +80,7 @@ const SignIn = ({ navigation }) => {
           textStyle={{ color: colors.black }}
           icon='google'
           title="Continue with Google"
-          onClick={() => {}}
+          onPress={() => nav.navigate('Confirm Account')}
         />
         <Button
           style={styles.altLogInButton}
@@ -85,7 +88,7 @@ const SignIn = ({ navigation }) => {
           textStyle={{ color: colors.black }}
           icon='facebook'
           title="Continue with Facebook"
-          onClick={() => {}}
+          onPress={() => {}}
         />
       </Container>
     </KeyboardDismisser>
