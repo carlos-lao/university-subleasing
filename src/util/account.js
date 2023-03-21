@@ -1,3 +1,5 @@
+import { Auth } from 'aws-amplify';
+
 // users must be at least 18
 export const getMinBirthdate = () => (new Date((new Date()).getFullYear()-18, (new Date()).getMonth(), (new Date()).getDate()));
 

@@ -10,6 +10,11 @@
       "StackName": "amplify-universitysubleasing-dev-103949",
       "StackId": "arn:aws:cloudformation:us-east-1:109435775749:stack/amplify-universitysubleasing-dev-103949/f9814e60-a7df-11ed-8a84-124ccc79aa15",
       "AmplifyAppId": "d43r68wsc9xe8"
+    },
+    "categories": {
+      "auth": {
+        "universitysubleasing": {}
+      }
     }
   }
 }
