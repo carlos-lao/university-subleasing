@@ -6,9 +6,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchBar } from '../../Misc/Inputs';
 import { ListingSummary } from '../../Misc/Displays';
 import { Container } from '../../Misc/Templates';
+import { Auth } from 'aws-amplify'
 
-const ExploreTab = ({ user }) => {
+const ExploreTab = ({ }) => {
   const { top } = useSafeAreaInsets();
+  const user = Auth.currentAuthenticatedUser();
 
   return (
     <Container style={[styles.container, { paddingTop: top + 70 }]}>
@@ -22,7 +24,7 @@ const ExploreTab = ({ user }) => {
         showsVerticalScrollIndicator={false}
       /> */}
       <View style={[styles.searchWrapper, { top: top + 10 } ]}>
-        <SearchBar style={styles.searchBar} addButtonEnabled={user !== null}/>
+        <SearchBar style={styles.searchBar} addButtonEnabled={user != null}/>
       </View>
     </Container>
   );

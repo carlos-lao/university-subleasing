@@ -1,4 +1,5 @@
 // external imports
+import { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -7,6 +8,7 @@ import { colors } from '../../../assets/style-guide';
 import { SignInTab, InboxTab, LikedTab, ExploreTab } from '../Screens/Tabs';
 
 const Tab = createBottomTabNavigator();
+const ICON_SIZE = 35;
 
 const TabNavigator = ({ user }) => {
   return (
@@ -21,29 +23,29 @@ const TabNavigator = ({ user }) => {
       <Tab.Screen
         name="Explore"
         component={ExploreTab}
-        options={{ tabBarIcon: ({ color, size }) => (
-          <Icon name="home-search-outline" size={size} color={color}/>
+        options={{ tabBarIcon: ({ color }) => (
+          <Icon name="home-search-outline" size={ICON_SIZE} color={color}/>
         )}}
       />
       <Tab.Screen
         name="Liked"
         component={LikedTab}
         options={{ tabBarIcon: ({ color }) => (
-          <Icon name="heart-outline" size={25} color={color}/>
+          <Icon name="heart-outline" size={ICON_SIZE} color={color}/>
         )}}
       />
       <Tab.Screen
         name="Inbox"
         component={InboxTab}
         options={{ tabBarIcon: ({ color }) => (
-          <Icon name="message-outline" size={25} color={color}/>
+          <Icon name="message-outline" size={ICON_SIZE} color={color}/>
         )}}
       />
       <Tab.Screen
         name={user ? "Profile" : "Sign In"}
         component={user ? ProfileTab : SignInTab}
         options={{ tabBarIcon: ({ color }) => (
-          <Icon name="account-outline" size={25} color={color}/>
+          <Icon name="account-outline" size={ICON_SIZE} color={color}/>
         )}}
       />
     </Tab.Navigator>

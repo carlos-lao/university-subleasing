@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderWidth: 1,
     borderColor: 'gray',
-    borderRadius: '50%',
+    borderRadius: 15,
     top: 8,
     right: 10,
   },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     height: 35,
     width: 35,
     backgroundColor: colors.primary,
-    borderRadius: '50%',
+    borderRadius: 17.5,
     marginLeft: 10,
   },
 });

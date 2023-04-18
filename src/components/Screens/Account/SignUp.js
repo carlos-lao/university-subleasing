@@ -13,6 +13,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Alert
 } from 'react-native';
 
 // internal imports
@@ -22,6 +23,7 @@ import { TextInput, Dropdown } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { account, consts } from '../../../util';
+import { signUp } from '../../../util/account';
 
 // constant
 const initialUserInfoState = {
@@ -33,7 +35,7 @@ const initialUserInfoState = {
   password: '',
 };
 
-const SignUp = ({ auth, signUp, navigation }) => {
+const SignUp = ({ navigation }) => {
   // constants
   const { bottom } = useSafeAreaInsets();
 
@@ -42,22 +44,15 @@ const SignUp = ({ auth, signUp, navigation }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
-  // lifecycle
-  /* TODO: add photos permission reqt
-  useEffect(() => {
-    
-  }, []);
-  */
-
   // helper functions
 	const handleSignUp = () => {
     const { imageURI, name, birthdate, gender, email, password } = userInfo;
 
 		if (!name || !birthdate || !gender || !email || !password) {
-			alert("Please fill in all fields.");
+			Alert.alert("Missing Field", "Please fill in all fields.");
 			return;
 		} else if (!imageURI) {
-      alert("Please add a profile photo.");
+      Alert.alert("No Photo", "Please add a profile photo.");
       return;
     }
 
@@ -67,8 +62,13 @@ const SignUp = ({ auth, signUp, navigation }) => {
       return;
     }
 
-	  signUp(userInfo);
-    navigation.navigate('Confirm Account', { email });
+	  signUp(userInfo).then((err) => {
+      if (err == null) {
+        navigation.navigate('Confirm Account', { email, password });
+      } else {
+        Alert.alert("Error", err);
+      }
+    })
 	}
 
   const addImage = async () => {
@@ -113,18 +113,19 @@ const SignUp = ({ auth, signUp, navigation }) => {
   );
 
   const renderPictureField = () => (
-    <View style={styles.pictureContainer}>
+    <View style={[styles.pictureContainer, userInfo.imageURI || styles.pictureContainerWithIcon]}>
       {
-        userInfo.imageURI !== '' &&
-        <Image
+        userInfo.imageURI !== '' ?
+        (<Image
           source={{ uri: userInfo.imageURI }}
           style={{ width: 200, height: 200 }}
-        />
+        />) :
+        (<Icon name="account" size={150} color={colors.primary} />)
       }
-      <View style={styles.uploadButtonContainer}>
+      <View style={[styles.uploadButtonContainer, {backgroundColor: userInfo.imageURI === '' ? colors.lightGray : colors.gray}]}>
         <TouchableOpacity style={styles.uploadButton} onPress={addImage} >
-          <Icon name="camera" size={15} color={colors.black} />
-          <Text> {userInfo.picture ? 'Edit' : 'Upload'} Image</Text>
+          <Icon name="camera" size={15} color={colors.white} />
+          <Text style={{color: colors.white}}> {userInfo.picture ? 'Edit' : 'Upload'} Image</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -261,23 +262,24 @@ const styles = StyleSheet.create({
     elevation: 2,
     height: 200,
     width: 200,
-    backgroundColor: colors.lightGray,
     position: 'relative',
     borderRadius: '100%',
     overflow: 'hidden',
-    borderColor: colors.black,
-    borderWidth: 0.5
+  },
+  pictureContainerWithIcon : {
+    display: 'flex',
+    borderColor: colors.lightGray,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   uploadButtonContainer: {
     opacity: 0.7,
     position: 'absolute',
     right: 0,
     bottom: 0,
-    backgroundColor: colors.gray,
     width: '100%',
     height: 45,
-    borderColor: colors.black,
-    borderTopWidth: 0.5
   },
   uploadButton: {
     flex: 1,

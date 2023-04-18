@@ -1,0 +1,45 @@
+type Like @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  user: ID! @index(name: "byUser")
+  postID: ID! @index(name: "byPost")
+}
+
+type Comment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  post: ID! @index(name: "byPost")
+  author: ID! @index(name: "byUser")
+  respondingTo: ID
+  content: String!
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  email: AWSEmail!
+  photo: String!
+  posts: [Post] @hasMany(indexName: "byUser", fields: ["id"])
+  comments: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
+  likes: [Like] @hasMany(indexName: "byUser", fields: ["id"])
+  gender: String!
+  birthDate: AWSDate
+}
+
+type Post @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  creator: ID! @index(name: "byUser")
+  roomType: String!
+  campus: String!
+  address: String!
+  rate: Int!
+  negotiable: Boolean!
+  startDate: AWSDate!
+  endDate: AWSDate!
+  imageDirectory: String!
+  perks: [String]
+  description: String
+  propertyType: String!
+  comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
+  likes: [Like] @hasMany(indexName: "byPost", fields: ["id"])
+}
+ 

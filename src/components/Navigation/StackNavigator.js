@@ -25,7 +25,7 @@ const StackNavigator = () => (
       <Stack.Screen name="View Listing" component={ListingView} />
       <Stack.Screen name="User Chat" component={UserChat}/>
       <Stack.Screen name="Active Listings" component={ActiveListings} />
-      <Stack.Screen name="Listing QnA" component={ListingQA} /> */}
+      <Stack.Screen name="Listing Q&A" component={ListingQA} /> */}
     </Stack.Group>
     <Stack.Group screenOptions={{ presentation: 'modal' }}>
       <Stack.Screen name="Sign In Modal" component={SignIn} />

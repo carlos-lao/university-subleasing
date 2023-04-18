@@ -1,10 +1,10 @@
 // external imports
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
   StyleSheet,
+  Alert
 } from 'react-native';
 
 // internal imports
@@ -13,20 +13,35 @@ import { TextInput } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { colors, font, dimensions } from '../../../../assets/style-guide';
+import { signIn } from '../../../util/account';
+
+import { Auth } from 'aws-amplify';
 
 // FIXME: alert on failed login
-const SignIn = () => {
+const SignIn = ({ navigation }) => {
   const [loginInfo, setLogInInfo] = useState({
     email: '',
     password: ''
   });
 
-  const nav = useNavigation();
-
   const handleSignIn = () => {
     const { email, password } = loginInfo;
 
-    nav.goBack();
+    if (!email || !password) {
+      Alert.alert("Missing Field", "Make sure you enter your username and password before attempting to log in.")
+      return
+    }
+
+    signIn(email, password).then((err) => {
+      if (err == null) {
+        navigation.navigate("Explore")
+      } else if (err === "unconfirmed") {
+        Alert.alert("Welcome back!", "Let's go ahead and finish your confirmation process to continue.")
+        navigation.navigate("Confirm Account", { email, password })
+      } else {
+        Alert.alert("Error", err)
+      }
+    })
   }
 
   const renderDualTextInput = () => (
@@ -54,7 +69,7 @@ const SignIn = () => {
       <Header
         modal
         useCross
-        onPressBack={nav.goBack}
+        onPressBack={navigation.goBack}
         title='Log in'
       />
       <Container style={styles.container}>
@@ -63,7 +78,7 @@ const SignIn = () => {
         <Button style={styles.loginButton} title="Log in" onPress={handleSignIn} />
 
         {/* LogIn Assistance */}
-        <Text style={styles.signUp}>Don't have an account? <Link onPress={() => nav.navigate('Sign Up')}>Sign up</Link></Text>
+        <Text style={styles.signUp}>Don't have an account? <Link onPress={() => navigation.navigate('Sign Up')}>Sign up</Link></Text>
         <Link onPress={() => {}}>Forgot your password</Link>
 
         {/* Divider */}
@@ -80,7 +95,7 @@ const SignIn = () => {
           textStyle={{ color: colors.black }}
           icon='google'
           title="Continue with Google"
-          onPress={() => nav.navigate('Confirm Account')}
+          onPress={() => {}}
         />
         <Button
           style={styles.altLogInButton}
