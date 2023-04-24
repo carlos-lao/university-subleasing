@@ -78,15 +78,6 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
-                            },
-                            {
-                                "allow": "private",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
                             }
                         ]
                     }
@@ -185,15 +176,6 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
-                            },
-                            {
-                                "allow": "private",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
                             }
                         ]
                     }
@@ -235,7 +217,7 @@ export const schema = {
                     "name": "posts",
                     "isArray": true,
                     "type": {
-                        "model": "Like"
+                        "model": "Listing"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -243,7 +225,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "user"
+                            "creator"
                         ]
                     }
                 },
@@ -251,7 +233,7 @@ export const schema = {
                     "name": "comments",
                     "isArray": true,
                     "type": {
-                        "model": "Like"
+                        "model": "Listing"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -259,7 +241,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "user"
+                            "creator"
                         ]
                     }
                 },
@@ -267,7 +249,7 @@ export const schema = {
                     "name": "likes",
                     "isArray": true,
                     "type": {
-                        "model": "Like"
+                        "model": "Listing"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -275,7 +257,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "user"
+                            "creator"
                         ]
                     }
                 },
@@ -323,15 +305,6 @@ export const schema = {
                         "rules": [
                             {
                                 "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            },
-                            {
-                                "allow": "private",
                                 "operations": [
                                     "create",
                                     "update",
@@ -449,7 +422,7 @@ export const schema = {
                     "name": "comments",
                     "isArray": true,
                     "type": {
-                        "model": "Like"
+                        "model": "Comment"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -457,7 +430,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "postID"
+                            "post"
                         ]
                     }
                 },
@@ -465,7 +438,7 @@ export const schema = {
                     "name": "likes",
                     "isArray": true,
                     "type": {
-                        "model": "Like"
+                        "model": "Comment"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -473,7 +446,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "postID"
+                            "post"
                         ]
                     }
                 },
@@ -522,15 +495,6 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
-                            },
-                            {
-                                "allow": "private",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
                             }
                         ]
                     }
@@ -541,5 +505,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "f920c6f288bf3c25c806fd063457c9e4"
+    "version": "117f30bc42d16981438eea77a34601e1"
 };

@@ -1,10 +1,10 @@
-type Like @model @auth(rules: [{allow: public}, {allow: private}]) {
+type Like @model @auth(rules: [{allow: public}]) {
   id: ID!
   user: ID! @index(name: "byUser")
   postID: ID! @index(name: "byListing")
 }
 
-type Comment @model @auth(rules: [{allow: public}, {allow: private}]) {
+type Comment @model @auth(rules: [{allow: public}]) {
   id: ID!
   post: ID! @index(name: "byListing")
   author: ID! @index(name: "byUser")
@@ -12,19 +12,19 @@ type Comment @model @auth(rules: [{allow: public}, {allow: private}]) {
   content: String!
 }
 
-type User @model @auth(rules: [{allow: public}, {allow: private}]) {
+type User @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   email: AWSEmail!
   picture: String!
-  posts: [Like] @hasMany(indexName: "byUser", fields: ["id"])
-  comments: [Like] @hasMany(indexName: "byUser", fields: ["id"])
-  likes: [Like] @hasMany(indexName: "byUser", fields: ["id"])
+  posts: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
+  comments: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
+  likes: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
   gender: String!
   birthDate: AWSDate!
 }
 
-type Listing @model @auth(rules: [{allow: public}, {allow: private}]) {
+type Listing @model @auth(rules: [{allow: public}]) {
   id: ID!
   title: String!
   creator: ID! @index(name: "byUser")
@@ -39,7 +39,7 @@ type Listing @model @auth(rules: [{allow: public}, {allow: private}]) {
   perks: AWSJSON!
   description: String
   propertyType: String!
-  comments: [Like] @hasMany(indexName: "byListing", fields: ["id"])
-  likes: [Like] @hasMany(indexName: "byListing", fields: ["id"])
+  comments: [Comment] @hasMany(indexName: "byListing", fields: ["id"])
+  likes: [Comment] @hasMany(indexName: "byListing", fields: ["id"])
 }
  

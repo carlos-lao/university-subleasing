@@ -79,9 +79,9 @@ type EagerUser = {
   readonly name: string;
   readonly email: string;
   readonly picture: string;
-  readonly posts?: (Like | null)[] | null;
-  readonly comments?: (Like | null)[] | null;
-  readonly likes?: (Like | null)[] | null;
+  readonly posts?: (Listing | null)[] | null;
+  readonly comments?: (Listing | null)[] | null;
+  readonly likes?: (Listing | null)[] | null;
   readonly gender: string;
   readonly birthDate: string;
   readonly createdAt?: string | null;
@@ -97,9 +97,9 @@ type LazyUser = {
   readonly name: string;
   readonly email: string;
   readonly picture: string;
-  readonly posts: AsyncCollection<Like>;
-  readonly comments: AsyncCollection<Like>;
-  readonly likes: AsyncCollection<Like>;
+  readonly posts: AsyncCollection<Listing>;
+  readonly comments: AsyncCollection<Listing>;
+  readonly likes: AsyncCollection<Listing>;
   readonly gender: string;
   readonly birthDate: string;
   readonly createdAt?: string | null;
@@ -131,8 +131,8 @@ type EagerListing = {
   readonly perks: string;
   readonly description?: string | null;
   readonly propertyType: string;
-  readonly comments?: (Like | null)[] | null;
-  readonly likes?: (Like | null)[] | null;
+  readonly comments?: (Comment | null)[] | null;
+  readonly likes?: (Comment | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -156,8 +156,8 @@ type LazyListing = {
   readonly perks: string;
   readonly description?: string | null;
   readonly propertyType: string;
-  readonly comments: AsyncCollection<Like>;
-  readonly likes: AsyncCollection<Like>;
+  readonly comments: AsyncCollection<Comment>;
+  readonly likes: AsyncCollection<Comment>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
