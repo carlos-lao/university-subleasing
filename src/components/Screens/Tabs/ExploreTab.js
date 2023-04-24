@@ -1,6 +1,7 @@
 // external imports
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 // internal imports
 import { SearchBar } from '../../Misc/Inputs';
@@ -10,7 +11,7 @@ import { Auth } from 'aws-amplify'
 
 const ExploreTab = ({ }) => {
   const { top } = useSafeAreaInsets();
-  const user = Auth.currentAuthenticatedUser();
+  const user = useSelector((state) => (state.user))
 
   return (
     <Container style={[styles.container, { paddingTop: top + 70 }]}>

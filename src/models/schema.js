@@ -60,7 +60,7 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byPost",
+                        "name": "byListing",
                         "fields": [
                             "postID"
                         ]
@@ -72,6 +72,15 @@ export const schema = {
                         "rules": [
                             {
                                 "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "private",
                                 "operations": [
                                     "create",
                                     "update",
@@ -149,7 +158,7 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byPost",
+                        "name": "byListing",
                         "fields": [
                             "post"
                         ]
@@ -170,6 +179,15 @@ export const schema = {
                         "rules": [
                             {
                                 "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "private",
                                 "operations": [
                                     "create",
                                     "update",
@@ -206,8 +224,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "photo": {
-                    "name": "photo",
+                "picture": {
+                    "name": "picture",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -217,7 +235,7 @@ export const schema = {
                     "name": "posts",
                     "isArray": true,
                     "type": {
-                        "model": "Post"
+                        "model": "Like"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -225,7 +243,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "creator"
+                            "user"
                         ]
                     }
                 },
@@ -233,7 +251,7 @@ export const schema = {
                     "name": "comments",
                     "isArray": true,
                     "type": {
-                        "model": "Comment"
+                        "model": "Like"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -241,7 +259,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "author"
+                            "user"
                         ]
                     }
                 },
@@ -272,7 +290,7 @@ export const schema = {
                     "name": "birthDate",
                     "isArray": false,
                     "type": "AWSDate",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -311,14 +329,23 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
                             }
                         ]
                     }
                 }
             ]
         },
-        "Post": {
-            "name": "Post",
+        "Listing": {
+            "name": "Listing",
             "fields": {
                 "id": {
                     "name": "id",
@@ -390,8 +417,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "imageDirectory": {
-                    "name": "imageDirectory",
+                "photoDirectory": {
+                    "name": "photoDirectory",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -399,11 +426,10 @@ export const schema = {
                 },
                 "perks": {
                     "name": "perks",
-                    "isArray": true,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": true,
+                    "attributes": []
                 },
                 "description": {
                     "name": "description",
@@ -423,7 +449,7 @@ export const schema = {
                     "name": "comments",
                     "isArray": true,
                     "type": {
-                        "model": "Comment"
+                        "model": "Like"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -431,7 +457,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "post"
+                            "postID"
                         ]
                     }
                 },
@@ -469,7 +495,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Posts",
+            "pluralName": "Listings",
             "attributes": [
                 {
                     "type": "model",
@@ -496,6 +522,15 @@ export const schema = {
                                     "delete",
                                     "read"
                                 ]
+                            },
+                            {
+                                "allow": "private",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
                             }
                         ]
                     }
@@ -506,5 +541,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "74ca1d3bc1899ef86c08398fb2a28291"
+    "version": "f920c6f288bf3c25c806fd063457c9e4"
 };

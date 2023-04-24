@@ -13,11 +13,8 @@ import { TextInput } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { colors, font, dimensions } from '../../../../assets/style-guide';
-import { signIn } from '../../../util/account';
+import { account } from '../../../util';
 
-import { Auth } from 'aws-amplify';
-
-// FIXME: alert on failed login
 const SignIn = ({ navigation }) => {
   const [loginInfo, setLogInInfo] = useState({
     email: '',
@@ -32,9 +29,9 @@ const SignIn = ({ navigation }) => {
       return
     }
 
-    signIn(email, password).then((err) => {
+    account.signIn(email, password).then((err) => {
       if (err == null) {
-        navigation.navigate("Explore")
+        navigation.navigate("Profile")
       } else if (err === "unconfirmed") {
         Alert.alert("Welcome back!", "Let's go ahead and finish your confirmation process to continue.")
         navigation.navigate("Confirm Account", { email, password })
@@ -48,6 +45,7 @@ const SignIn = ({ navigation }) => {
     <View style={styles.dualInput}>
       <TextInput
         style={[styles.inputs, styles.inputOne]}
+        focusedStyle={{borderBottomWidth: 0.5}}
         placeholder="Email"
         value={loginInfo.email}
         textContentType="emailAddress"
@@ -55,6 +53,7 @@ const SignIn = ({ navigation }) => {
       />
       <TextInput
         style={[styles.inputs, styles.inputTwo]}
+        focusedStyle={{borderTopWidth: 0.5}}
         placeholder="Password"
         secureTextEntry
         value={loginInfo.password}
@@ -125,11 +124,12 @@ const styles = StyleSheet.create({
     padding: 10
   },
   inputOne: {
+    borderBottomWidth: 0.25,
     borderTopLeftRadius: dimensions.borderRadius,
     borderTopRightRadius: dimensions.borderRadius,
   },
   inputTwo: {
-    borderTopWidth: 0,
+    borderTopWidth: 0.25,
     borderBottomLeftRadius: dimensions.borderRadius,
     borderBottomRightRadius: dimensions.borderRadius,
   },

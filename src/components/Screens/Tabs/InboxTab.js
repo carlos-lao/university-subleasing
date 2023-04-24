@@ -9,28 +9,31 @@ import {
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 // internal imports
 import { Header, LogInMessage } from '../../Misc/System';
 import { InboxNotification } from '../../Misc/Displays';
 import { Container } from '../../Misc/Templates';
 
-const InboxTab = ({ user }) => {
+const InboxTab = () => {
     const { top } = useSafeAreaInsets();
+    const user = useSelector((state) => (state.user))
 
     const [chats, setChats] = useState([]);
     const [currTab, setCurrTab] = useState(0);
 
     const renderMessagesView = () => (
-        <FlatList
-            style={styles.pageContent}
-            data={chats}
-            renderItem={(chat) => {
-                <InboxNotification chat={item} />
-            }}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-        />
+        // <FlatList
+        //     style={styles.pageContent}
+        //     data={chats}
+        //     renderItem={(chat) => {
+        //         <InboxNotification chat={chat} key={chat.id}/>
+        //     }}
+        //     keyExtractor={item => item.id}
+        //     showsVerticalScrollIndicator={false}
+        // />
+        <View></View>
     )
 
     const renderCommentsView = () => (

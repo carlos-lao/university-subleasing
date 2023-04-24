@@ -100,7 +100,7 @@ const ListingSummary = ({ listingInfo, user, likeable }) => {
         }}
       >
         <Text style={styles.title}>{roomTypes.find( r => r.value === roomType ).label} •<Text style={styles.userTitle}> {title}</Text></Text>
-        <Text style={styles.period}>{`${formatDate(start)} — ${formatDate(end)}`}</Text>
+        <Text style={styles.period}>{`${(start)} — ${formatDate(end)}`}</Text>
         <Text style={styles.price}>
           <Text style={{
             fontWeight: 'bold',

@@ -1,11 +1,12 @@
 // external imports
 import { Auth, Storage } from 'aws-amplify';
-import { DataStore } from '@aws-amplify/datastore';
+import { DataStore } from "@aws-amplify/datastore";
 import { User } from '../models';
 import uuid from 'react-native-uuid';
 
 // internal imports
 import { convertToAWSDate } from './util';
+import { store, setCurrentUser, resetCurrentUser } from '../store';
 
 // users must be at least 18
 export const getMinBirthdate = () => (new Date((new Date()).getFullYear()-18, (new Date()).getMonth(), (new Date()).getDate()));
@@ -46,7 +47,7 @@ export const signUp = async ({ imageURI, name, birthdate, gender, email, passwor
       password,
       attributes: {
         gender, name, 
-        birthdate: convertToAWSDate(birthdate),
+        birthdate: birthdate.toISOString().slice(0,10),
         picture: imageFilename
       }
     });
@@ -60,12 +61,12 @@ export const signUp = async ({ imageURI, name, birthdate, gender, email, passwor
       new User({
         "name": name,
         "email": email,
-        "photo": imageFilename,
+        "picture": imageFilename,
         "posts": [],
         "comments": [],
         "likes": [],
         "gender": gender,
-        "birthDate": convertToAWSDate(birthdate)
+        "birthDate": birthdate.toISOString().slice(0, 10)
       })
     );
   } catch (e) {
@@ -83,12 +84,24 @@ export const confirmSignUp = async (email, code) => {
 
 export const signIn = async (email, password) => {
   try {
-    const user = await Auth.signIn(email, password);
-    
+    const {attributes} = await Auth.signIn(email, password)
+    const profilePicture = await Storage.get(attributes.picture)
+    const users = await DataStore.query(User, u => u.email.eq(email));
+    store.dispatch(setCurrentUser({...attributes, picture: profilePicture, id: users[0].id}))
   } catch (e) {
     if (e.name == "UserNotConfirmedException") {
       return "unconfirmed";
     }
+    return e.message;
+  }
+}
+
+export const signOut = async () => {
+  try {
+    await Auth.signOut();
+    DataStore.clear();
+    store.dispatch(resetCurrentUser())
+  } catch (e) {
     return e.message;
   }
 }

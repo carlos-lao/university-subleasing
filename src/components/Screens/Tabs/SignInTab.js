@@ -1,7 +1,7 @@
-// external Imports
+// external
 import { Text, StyleSheet } from 'react-native';
 
-// internal imports
+// internal
 import { Button, Link, Redirect } from '../../Misc/Pressables'
 import { Header } from '../../Misc/System';
 import { Container } from '../../Misc/Templates';

@@ -1,16 +1,18 @@
 // external imports
-import { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
 
 // internal imports
 import { colors } from '../../../assets/style-guide';
-import { SignInTab, InboxTab, LikedTab, ExploreTab } from '../Screens/Tabs';
+import { SignInTab, InboxTab, LikedTab, ExploreTab, ProfileTab } from '../Screens/Tabs';
 
 const Tab = createBottomTabNavigator();
 const ICON_SIZE = 35;
 
-const TabNavigator = ({ user }) => {
+const TabNavigator = () => {
+  const user = useSelector((state) => (state.user))
+
   return (
     <Tab.Navigator 
       screenOptions={{

@@ -78,12 +78,12 @@ type EagerUser = {
   readonly id: string;
   readonly name: string;
   readonly email: string;
-  readonly photo: string;
-  readonly posts?: (Post | null)[] | null;
-  readonly comments?: (Comment | null)[] | null;
+  readonly picture: string;
+  readonly posts?: (Like | null)[] | null;
+  readonly comments?: (Like | null)[] | null;
   readonly likes?: (Like | null)[] | null;
   readonly gender: string;
-  readonly birthDate?: string | null;
+  readonly birthDate: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -96,12 +96,12 @@ type LazyUser = {
   readonly id: string;
   readonly name: string;
   readonly email: string;
-  readonly photo: string;
-  readonly posts: AsyncCollection<Post>;
-  readonly comments: AsyncCollection<Comment>;
+  readonly picture: string;
+  readonly posts: AsyncCollection<Like>;
+  readonly comments: AsyncCollection<Like>;
   readonly likes: AsyncCollection<Like>;
   readonly gender: string;
-  readonly birthDate?: string | null;
+  readonly birthDate: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -112,9 +112,9 @@ export declare const User: (new (init: ModelInit<User>) => User) & {
   copyOf(source: User, mutator: (draft: MutableModel<User>) => MutableModel<User> | void): User;
 }
 
-type EagerPost = {
+type EagerListing = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Post, 'id'>;
+    identifier: ManagedIdentifier<Listing, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
@@ -127,19 +127,19 @@ type EagerPost = {
   readonly negotiable: boolean;
   readonly startDate: string;
   readonly endDate: string;
-  readonly imageDirectory: string;
-  readonly perks?: (string | null)[] | null;
+  readonly photoDirectory: string;
+  readonly perks: string;
   readonly description?: string | null;
   readonly propertyType: string;
-  readonly comments?: (Comment | null)[] | null;
+  readonly comments?: (Like | null)[] | null;
   readonly likes?: (Like | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyPost = {
+type LazyListing = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Post, 'id'>;
+    identifier: ManagedIdentifier<Listing, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
@@ -152,18 +152,18 @@ type LazyPost = {
   readonly negotiable: boolean;
   readonly startDate: string;
   readonly endDate: string;
-  readonly imageDirectory: string;
-  readonly perks?: (string | null)[] | null;
+  readonly photoDirectory: string;
+  readonly perks: string;
   readonly description?: string | null;
   readonly propertyType: string;
-  readonly comments: AsyncCollection<Comment>;
+  readonly comments: AsyncCollection<Like>;
   readonly likes: AsyncCollection<Like>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type Post = LazyLoading extends LazyLoadingDisabled ? EagerPost : LazyPost
+export declare type Listing = LazyLoading extends LazyLoadingDisabled ? EagerListing : LazyListing
 
-export declare const Post: (new (init: ModelInit<Post>) => Post) & {
-  copyOf(source: Post, mutator: (draft: MutableModel<Post>) => MutableModel<Post> | void): Post;
+export declare const Listing: (new (init: ModelInit<Listing>) => Listing) & {
+  copyOf(source: Listing, mutator: (draft: MutableModel<Listing>) => MutableModel<Listing> | void): Listing;
 }

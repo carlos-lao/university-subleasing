@@ -2,24 +2,18 @@
 import { FlatList, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 // internal imports
 import { LogInMessage, Header } from '../../Misc/System';
 import { ListingSummary } from '../../Misc/Displays';
 import { Container } from '../../Misc/Templates';
 
-const LikedTab = ({ user, navigation }) => {
+const LikedTab = () => {
   const { top } = useSafeAreaInsets();
+  const user = useSelector((state) => (state.user))
 
   const [ likedPosts, setLikedPosts ] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      const subscription = getLikedPosts(user.email, (posts) => { setLikedPosts(posts) });
-
-      return () => { subscription?.unsubscribe?.() };
-    }
-  }, [])
 
   const renderContent = () => {
     if (user) {

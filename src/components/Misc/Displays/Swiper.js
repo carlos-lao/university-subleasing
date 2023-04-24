@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { Swiper as RNSwiper } from 'react-native-swiper';
+import RNSwiper from 'react-native-swiper';
 
 // internal imports
 import { colors, dimensions, font } from '../../../../assets/style-guide';
@@ -19,19 +19,19 @@ const numberedPagination = (idx, total) => {
   )
 }
 
-const Swiper = ({ style, images, useDots, ...props }) => {
+const Swiper = ({ style, photos, useDots, ...props }) => {
 
   return (
-    <View style={[style, !images && styles.center]}>
+    <View style={[style, !photos && styles.center]}>
       <RNSwiper
-        key={images.length}
-        activeDotColor={Colors.blueOne}
+        key={photos.length}
+        activeDotColor={colors.primary}
         paginationStyle={{ marginBottom: -15 }}
         renderPagination={useDots ? null : numberedPagination}
         loop={false}
         {...props}
       >
-        {images.map((src, idx) =>
+        {photos.map((src, idx) =>
           <Image source={{ uri: src }} style={styles.slide} key={idx}/>
         )}
       </RNSwiper>

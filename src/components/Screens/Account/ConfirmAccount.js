@@ -9,7 +9,7 @@ import { CodeInput } from '../../Misc/Inputs';
 import { Button } from '../../Misc/Pressables';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
-import { confirmSignUp } from '../../../util/account';
+import { account } from '../../../util';
 
 const ConfirmAccount = ({ navigation, route }) => {
   const { email, password } = route.params;
@@ -22,12 +22,12 @@ const ConfirmAccount = ({ navigation, route }) => {
       return
     }
 
-    confirmSignUp(email, code).then((err) => {
+    account.confirmSignUp(email, code).then((err) => {
       if (err == null) {
         Alert.alert("Success", "Confirmation successful! Now signing you in...")
-        signIn(email, password).then((signInErr) => {
+        auth.signIn(email, password).then((signInErr) => {
           if (signInErr == null) {
-            navigation.navigate("Explore")
+            navigation.navigate("Profile")
           } else {
             Alert.alert("Error", signInErr)
           }

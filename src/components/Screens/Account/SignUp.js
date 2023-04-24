@@ -23,7 +23,6 @@ import { TextInput, Dropdown } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { account, consts } from '../../../util';
-import { signUp } from '../../../util/account';
 
 // constant
 const initialUserInfoState = {
@@ -62,7 +61,7 @@ const SignUp = ({ navigation }) => {
       return;
     }
 
-	  signUp(userInfo).then((err) => {
+	  account.signUp(userInfo).then((err) => {
       if (err == null) {
         navigation.navigate('Confirm Account', { email, password });
       } else {
@@ -84,8 +83,7 @@ const SignUp = ({ navigation }) => {
         setUserInfo({ ...userInfo, imageURI: result.assets[0].uri })
       }
     } catch (e) {
-      console.log(e);
-      alert("Uh oh! An unexpected error occurred. Try uploading your photo again.")
+      Alert.alert("Error", "Uh oh! An unexpected error occurred. Try uploading your photo again.")
     }
   }
 

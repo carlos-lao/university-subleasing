@@ -12,7 +12,7 @@ import {
 // internal imports
 import { colors, font, dimensions } from '../../../../assets/style-guide';
 
-const TextInput = ({ label, labelStyle, style, toggleableSecurity, ...props }) => {
+const TextInput = ({ label, labelStyle, style, toggleableSecurity, focusedStyle, ...props }) => {
   const inputRef = useRef();
 
   const [focused, setFocused] = useState(false);
@@ -23,13 +23,14 @@ const TextInput = ({ label, labelStyle, style, toggleableSecurity, ...props }) =
       style={[
         styles.container,
         style,
-        focused && { borderColor: colors.black }
+        focused && { ...focusedStyle, borderColor: colors.black }
       ]}
       onPress={() => inputRef.current.focus()}
     >
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
       <View style={styles.inputContainer}>
         <Input
+          placeholderTextColor={colors.lightGray}
           ref={inputRef}
           style={[styles.input, !props.multiline && { height: 20 }]}
           autoCapitalize='none'
