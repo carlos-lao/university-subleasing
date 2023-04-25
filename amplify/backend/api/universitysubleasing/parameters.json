@@ -2,5 +2,11 @@
   "AppSyncApiName": "universitysubleasing",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-04-24T13:50:20.339Z"
+  "AuthModeLastUpdated": "2023-04-25T13:16:40.880Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authuniversitysubleasing",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

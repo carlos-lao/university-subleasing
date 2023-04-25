@@ -22,7 +22,7 @@ import { Button } from '../../Misc/Pressables';
 import { TextInput, Dropdown } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
-import { account, consts } from '../../../util';
+import { user, consts } from '../../../util';
 
 // constant
 const initialUserInfoState = {
@@ -55,13 +55,13 @@ const SignUp = ({ navigation }) => {
       return;
     }
 
-    if (account.passwordReqts.map(({ fulfilled }) => (fulfilled(password))
+    if (user.passwordReqts.map(({ fulfilled }) => (fulfilled(password))
     ).includes(false)) {
       alert("Check to make sure your password fulfills all requirements.");
       return;
     }
 
-	  account.signUp(userInfo).then((err) => {
+	  user.signUp(userInfo).then((err) => {
       if (err == null) {
         navigation.navigate('Confirm Account', { email, password });
       } else {
@@ -181,7 +181,7 @@ const SignUp = ({ navigation }) => {
               textContentType="newPassword"
               onChangeText={(text) => { setUserInfo({ ...userInfo, password: text }) } }
             />
-            {account.passwordReqts.map( ({ msg, fulfilled }, index) => (
+            {user.passwordReqts.map( ({ msg, fulfilled }, index) => (
               fulfilled(userInfo.password) ?
               null :
               <Text
@@ -206,8 +206,8 @@ const SignUp = ({ navigation }) => {
             setUserInfo({ ...userInfo, birthdate: date });
             setShowCalendar(false);
           }}
-          date={userInfo.birthdate || account.getMinBirthdate()}
-          maximumDate={account.getMinBirthdate()}
+          date={userInfo.birthdate || user.getMinBirthdate()}
+          maximumDate={user.getMinBirthdate()}
           onCancel={() => setShowCalendar(false)}
         />
       </Container>

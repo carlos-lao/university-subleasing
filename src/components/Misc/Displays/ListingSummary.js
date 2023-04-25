@@ -13,101 +13,85 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 
 // internal imports
-import { MONTHS, ROOM_TYPES } from '../../../util/constants';
+import { ROOM_TYPES } from '../../../util/constants';
 import { colors, dimensions, font } from '../../../../assets/style-guide';
 import { listing } from '../../../util';
 import Swiper from './Swiper';
+import { useSelector } from 'react-redux';
 
-const ListingSummary = ({ listingInfo, user, likeable }) => {
+const ListingSummary = ({ listingInfo, likeable, onToggleLike }) => {
+  const { roomType, title, rate, photos, startDate, endDate } = listingInfo;
   const navigation = useNavigation();
-  const { roomType, title, images, rate, start, end } = listingInfo;
-  const [ liked, setLiked ] = useState(false);
-  const [ imageURIs, setImageURIs ] = useState(null);
+  const [currentUser, likes] = useSelector(({ user, likes }) => ([user, likes]))
 
-//   useEffect(() => {
-//     const loadImages = async () => {
-//       try {
-//         const imageFiles = await Storage.list(images);
-//         const imagePromises = imageFiles.map((img) => Storage.get(img.key));
-//         const imageResults = await Promise.all(imagePromises);
-//         setImageURIs(imageResults);
-//       } catch (e) {
-//         console.log(e.message);
-//       }
-//     }
-//     loadImages();
-//   }, [listingInfo])
+  const [liked, setLiked] = useState(false);
 
-//   useEffect(() => {
-//     if (user) {
-//       return (async () => {
-//         const unsubscribe = await likedByUser(user.email, listingInfo.id, (result) => setLiked(result))
-//         return unsubscribe;
-//       })();
-//     }
-//   }, [])
-  
   useEffect(() => {
-    if(!user) {
-      setLiked(false);
-    }
-  });
+    setLiked(likes.includes(listingInfo.id))
+  }, [likes])
 
   return (
     <View style={styles.container}>
       {/* Swiper  */}
-      { imageURIs === null ?
+      {photos === null ?
         (
           <View style={[styles.swiper, styles.loadingView]}>
-            <ActivityIndicator size="large" color={colors.secondary}/>
+            <ActivityIndicator size="large" color={colors.white} />
           </View>
         ) :
         (
-          <CustomSwiper
+          <Swiper
             style={styles.swiper}
-            images={imageURIs}
+            photos={photos}
             useDots
           />
         )
       }
       {/* Like Button */}
-      { 
+      {
         likeable &&
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => {
-            if (user !== null) {
-              toggleListingLike(user.email, listingInfo)
-                .then( (result) => { setLiked(result) } )
+            if (currentUser != null) {
+              if (onToggleLike != null) {
+                onToggleLike(!liked)
+                setLiked(!liked)
+              } else {
+                listing.toggleLikeListing(listingInfo, currentUser).then((result) => { setLiked(result) })
+              }
             } else {
-              Alert.alert('Log In to Continue', 'Sorry, but you must have an account to unlock this feature.')
+              Alert.alert('Log In to Continue', 'Sorry, you must be logged in to us this feature.', [
+                {
+                  text: 'OK',
+                  style: 'cancel'
+                },
+                {
+                  text: 'Sign In',
+                  style: 'default',
+                  onPress: () => navigation.navigate('Sign In Modal')
+                }
+              ])
             }
-          } } 
-        style={styles.heart}>
-          <Icon name={liked ? 'heart' : 'heart-outline'} size={20} color={liked ? colors.lightRed : colors.white } />
+          }}
+          style={styles.heart}>
+          <Icon name={liked ? 'heart' : 'heart-outline'} size={25} color={liked ? colors.lightRed : colors.white} />
         </TouchableOpacity>
       }
-      
+
       {/* Text Details  */}
       <Pressable
         onPress={() => {
           navigation.navigate('View Listing', {
             postPreview: false,
-            listingInfo: {
-              ...listingInfo,
-              images: imageURIs
-            }
+            listingInfo
           })
         }}
       >
-        <Text style={styles.title}>{roomTypes.find( r => r.value === roomType ).label} •<Text style={styles.userTitle}> {title}</Text></Text>
-        <Text style={styles.period}>{`${(start)} — ${formatDate(end)}`}</Text>
+        <Text style={styles.title}>{ROOM_TYPES.find(r => r.value === roomType).label} •<Text style={styles.userTitle}> {title}</Text></Text>
+        <Text style={styles.period}>{`${listing.formatDate(new Date(startDate))} — ${listing.formatDate(new Date(endDate))}`}</Text>
         <Text style={styles.price}>
-          <Text style={{
-            fontWeight: 'bold',
-            color: colors.black,
-          }}>
-            ${rate}
-          </Text> /month
+          <Text style={{ fontWeight: 'bold', color: colors.black, fontSize: font.medium }}>${rate}</Text>
+          <Text style={{ fontSize: font.medium }}>/</Text>month
         </Text>
       </Pressable>
     </View>
@@ -135,7 +119,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: font.small,
+    fontSize: font.medium,
     marginTop: 10,
   },
   userTitle: {
@@ -148,7 +132,7 @@ const styles = StyleSheet.create({
   },
   price: {
     position: 'absolute',
-    fontSize: font.small,
+    fontSize: font.xsmall,
     color: colors.gray,
     bottom: 5,
     right: 0,

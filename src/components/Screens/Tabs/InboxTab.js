@@ -18,22 +18,23 @@ import { Container } from '../../Misc/Templates';
 
 const InboxTab = () => {
     const { top } = useSafeAreaInsets();
-    const user = useSelector((state) => (state.user))
+    const currentUser = useSelector(({ user }) => (user))
 
     const [chats, setChats] = useState([]);
     const [currTab, setCurrTab] = useState(0);
 
     const renderMessagesView = () => (
-        // <FlatList
-        //     style={styles.pageContent}
-        //     data={chats}
-        //     renderItem={(chat) => {
-        //         <InboxNotification chat={chat} key={chat.id}/>
-        //     }}
-        //     keyExtractor={item => item.id}
-        //     showsVerticalScrollIndicator={false}
-        // />
-        <View></View>
+        <View>
+        {/* <FlatList
+            style={styles.pageContent}
+            data={chats}
+            renderItem={(chat) => {
+                <InboxNotification chat={chat} key={chat.id}/>
+            }}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+        /> */}
+        </View>
     )
 
     const renderCommentsView = () => (
@@ -43,7 +44,7 @@ const InboxTab = () => {
     )
 
     const renderContent = () => {
-        if (user) {
+        if (currentUser) {
             return (
                 <View>
                     <View style={styles.topBar}>
@@ -56,7 +57,7 @@ const InboxTab = () => {
                             </Pressable>
                         ))}
                     </View>
-                    {currTab === 0 ? renderMessagesView() : renderCommentsView()}
+                    {/* {currTab === 0 ? renderMessagesView() : renderCommentsView()} */}
                 </View>
             );
         }
@@ -67,8 +68,8 @@ const InboxTab = () => {
     }
 
     return (
-        <Container safe={!user} style={user && { paddingTop: top }}>
-            <Header hr={!user} title='Inbox' />
+        <Container safe={!currentUser} style={currentUser && { paddingTop: top }}>
+            <Header hr={!currentUser} title='Inbox' />
             {renderContent()}
         </Container>
     );

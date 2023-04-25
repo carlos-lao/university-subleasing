@@ -1,26 +1,53 @@
 // external imports
 import { FlatList, StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
 // internal imports
 import { LogInMessage, Header } from '../../Misc/System';
 import { ListingSummary } from '../../Misc/Displays';
 import { Container } from '../../Misc/Templates';
+import { listing } from '../../../util';
 
-const LikedTab = () => {
+const LikedTab = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
-  const user = useSelector((state) => (state.user))
+  const [currentUser, likes] = useSelector(({ user, likes }) =>([user, likes]))
 
-  const [ likedPosts, setLikedPosts ] = useState([]);
+  const [ likedListings, setLikedListings ] = useState([])
+
+  const tabIsFocused = useRef(true)
+
+  // load liked listings on first render
+  useEffect(() => {
+    listing.loadListingsById(likes).then((data) => {
+      setLikedListings(data)
+    })
+  }, [])
+
+
+  useEffect(() => {
+    if (!navigation.isFocused()) {
+      listing.loadListingsById(likes).then((data) => {
+        setLikedListings(data)
+      })
+    } else {
+      const blurHandler = navigation.addListener('blur', () => {
+        listing.loadListingsById(likes).then((data) => {
+          setLikedListings(data)
+        })
+      });
+  
+      return blurHandler;
+    }
+  }, [likes])
 
   const renderContent = () => {
-    if (user) {
+    if (currentUser) {
       return (
         <FlatList
           style={styles.listingsContainer}
-          data={likedPosts}
+          data={likedListings}
           renderItem={({ item }) => (
             <ListingSummary listingInfo={item} key={item.id} likeable/>
           )}
@@ -36,7 +63,7 @@ const LikedTab = () => {
   }
 
   return (
-    <Container safe={!user} style={user && {paddingTop: top}}>
+    <Container safe={!currentUser} style={currentUser && {paddingTop: top}}>
       <Header hr shadow title='Liked'/>
       {renderContent()}
     </Container>

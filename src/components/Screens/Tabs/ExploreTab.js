@@ -1,31 +1,71 @@
-// external imports
-import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
+// external
+import { View, StyleSheet, FlatList, Dimensions, RefreshControl, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 
-// internal imports
+// internal
 import { SearchBar } from '../../Misc/Inputs';
 import { ListingSummary } from '../../Misc/Displays';
 import { Container } from '../../Misc/Templates';
-import { Auth } from 'aws-amplify'
+import { useEffect, useState } from 'react';
+import { colors } from '../../../../assets/style-guide';
+import { listing } from '../../../util';
 
-const ExploreTab = ({ }) => {
+const ExploreTab = ({ navigation }) => {
   const { top } = useSafeAreaInsets();
-  const user = useSelector((state) => (state.user))
+  const currentUser = useSelector(({ user }) => (user))
+
+  const [listings, setListings] = useState([])
+  const [refreshing, setRefreshing] = useState(false)
+
+
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      listing.loadListings().then((listings) => {
+        setListings(listings)
+      })
+    });
+    return focusHandler;
+  }, [navigation]);
+
+  useEffect(() => {
+    listing.loadListings().then((listings) => {
+      setListings(listings)
+    })
+  }, [])
+
+  const refreshContent = () => {
+    setRefreshing(true)
+    listing.loadListings().then((listings) => {
+      setListings(listings)
+      setTimeout(() => {
+        setRefreshing(false)
+      }, 2000)
+    })
+  }
 
   return (
     <Container style={[styles.container, { paddingTop: top + 70 }]}>
-      {/* <FlatList
+      <FlatList
         style={styles.listingsContainer}
-        data={posts}
+        data={listings}
         renderItem={({ item }) => (
-          <ListingSummary listingInfo={item} key={item.id} likeable/>
+          <ListingSummary listingInfo={item} key={item.id} likeable={item.creator != currentUser?.id}/>
         )}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
-      /> */}
+        refreshControl={
+          <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refreshContent}
+              title="Pull to refresh"
+              tintColor={colors.lightGray}
+              titleColor={colors.lightGray}
+           />
+        }
+      />
       <View style={[styles.searchWrapper, { top: top + 10 } ]}>
-        <SearchBar style={styles.searchBar} addButtonEnabled={user != null}/>
+        <SearchBar style={styles.searchBar} addButtonEnabled={currentUser != null}/>
       </View>
     </Container>
   );

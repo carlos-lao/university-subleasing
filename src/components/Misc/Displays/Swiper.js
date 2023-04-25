@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import RNSwiper from 'react-native-swiper';
 
@@ -61,5 +62,10 @@ const styles = StyleSheet.create({
   center: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  activityIndicatorContainer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   }
 });

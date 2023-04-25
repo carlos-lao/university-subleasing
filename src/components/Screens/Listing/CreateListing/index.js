@@ -3,7 +3,9 @@ import { useState, useRef, useEffect } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {
     Animated,
+    KeyboardAvoidingView,
     ScrollView,
+    Alert
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { faker } from '@faker-js/faker';
@@ -34,9 +36,9 @@ const LISTING_INFO_INIT_STATE = {
     description: '',
     propertyType: '',
     roomType: '',
-    start: null,
-    end: null,
-    images: [],
+    startDate: null,
+    endDate: null,
+    photos: [],
     perks: {
         "Utilities": [],
         "Included Furniture": [],
@@ -74,8 +76,8 @@ const initialListingInfoState = {
     description: faker.lorem.paragraph(10),
     propertyType: 'town',
     roomType: 'double',
-    start: new Date(2023, 8, 16),
-    end: new Date(2022, 12, 19),
+    startDate: new Date(2023, 8, 16),
+    endDate: new Date(2022, 12, 19),
     photos: [],
     perks: LISTING_INFO_INIT_STATE.perks
 };
@@ -84,14 +86,13 @@ const ANIMATION_TIME = 250
 
 const CreateListing = ({ navigation }) => {
     // constants
-    const user = useSelector((state) => (state.user))
+    const currentUser = useSelector(({ user }) => (user))
 
     // state
     const [currPage, setCurrPage] = useState(1);
     const [listingInfo, setListingInfo] = useState({
-        // ...FORM_INIT_STATE.newListing.listingInfo,
-        ...initialListingInfoState,
-        creator: user.email
+        ...LISTING_INFO_INIT_STATE,
+        creator: currentUser.id
     })
     const [addedPerks, setAddedPerks] = useState(ADDED_PERKS_INIT_STATE);
     const [addPerkModal, setAddPerkModal] = useState(ADD_PERK_MODAL_INIT_STATE);
@@ -99,13 +100,12 @@ const CreateListing = ({ navigation }) => {
 
     const pageOpacity = [useRef(new Animated.Value(1)).current, useRef(new Animated.Value(0)).current, useRef(new Animated.Value(0)).current, useRef(new Animated.Value(0)).current]
 
-    // helper functions
-    // const inspectFields = () => {
-    //     // if ( currPage === 1) {
-    //     //   // const { title, campus, rate, images, start, end }
-    //     //   return title && campus && rate && 
-    //     // }
-    // }
+    useEffect(() => {
+        const focusHandler = navigation.addListener('focus', () => {
+          setAddedPerks(ADDED_PERKS_INIT_STATE);
+        });
+        return focusHandler;
+      }, [navigation]);
 
     const pageTransition = (origIdx, destIdx) => {
         Animated.timing(
@@ -123,7 +123,17 @@ const CreateListing = ({ navigation }) => {
     // transition functions
     const prevPage = () => {
         if (currPage === 1) {
-            navigation.goBack()
+            Alert.alert("Exit Without Saving", "Are you sure you want to stop working on this listing? Any changes you made will not be saved", [
+                {
+                    text: "Continue Editing",
+                    style: 'default'
+                },
+                {
+                    text: "Yes, I'm Sure",
+                    style: 'destructive',
+                    onPress: () => navigation.goBack()
+                }
+            ])
         } else {
             const currIdx = currPage - 1;
             pageTransition(currIdx, currIdx - 1);
@@ -134,12 +144,12 @@ const CreateListing = ({ navigation }) => {
         if (currPage === pageOpacity.length) {
             const { address } = listingInfo;
             navigation.navigate('View Listing', {
-                postPreview: true,
+                preview: true,
                 listingInfo: {
                     ...listingInfo,
                     address: `${address.street}, ${address.city}, ${address.state} ${address.zip}`,
-                    start: listingInfo.start.toISOString().slice(0, 10),
-                    end: listingInfo.end.toISOString().slice(0, 10)
+                    startDate: listingInfo.startDate.toISOString().slice(0, 10),
+                    endDate: listingInfo.endDate.toISOString().slice(0, 10)
                 }
             })
         } else {
@@ -158,6 +168,7 @@ const CreateListing = ({ navigation }) => {
                 onPressBack={prevPage}
             />
             <Container>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={100}>
                 <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
                     {currPage === 1 &&
                         <MainEntry
@@ -165,8 +176,8 @@ const CreateListing = ({ navigation }) => {
                             value={listingInfo}
                             onSubmit={nextPage}
                             propagateChanges={propagateChanges}
-                            leaseStart={listingInfo.start}
-                            leaseEnd={listingInfo.end}
+                            leaseStart={listingInfo.startDate}
+                            leaseEnd={listingInfo.endDate}
                             showCalendar={showCalendar}
                             setShowCalendar={setShowCalendar}
                         />
@@ -202,20 +213,21 @@ const CreateListing = ({ navigation }) => {
                         />
                     }
                 </ScrollView>
+                </KeyboardAvoidingView>
                 <DateTimePickerModal
                     isVisible={showCalendar}
                     mode="date"
                     onConfirm={(date) => {
-                        if (!listingInfo.start) {
-                            setListingInfo({ ...listingInfo, start: date });
+                        if (!listingInfo.startDate) {
+                            setListingInfo({ ...listingInfo, startDate: date });
                         } else {
-                            setListingInfo({ ...listingInfo, end: date });
+                            setListingInfo({ ...listingInfo, endDate: date });
                             setShowCalendar(false);
                         }
                     }}
-                    minimumDate={listingInfo.start || new Date()}
+                    minimumDate={listingInfo.startDate || new Date()}
                     onCancel={() => {
-                        setListingInfo({ ...listingInfo, start: null, end: null });
+                        setListingInfo({ ...listingInfo, startDate: null, end: null });
                         setShowCalendar(false);
                     }}
                 />

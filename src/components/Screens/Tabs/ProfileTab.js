@@ -8,14 +8,14 @@ import { Redirect } from '../../Misc/Pressables'
 import { Header } from '../../Misc/System';
 import { Container } from '../../Misc/Templates';
 import { colors, font } from '../../../../assets/style-guide';
-import { signOut } from '../../../util/account';
+import { user } from '../../../util';
 
 const ProfileTab = ({ navigation }) => {
     const { top } = useSafeAreaInsets();
-    const user = useSelector((state) => (state.user))
+    const currentUser = useSelector(({ user }) => (user))
 
     const handleSignOut = () => {
-        signOut().then((err) => {
+        user.signOut().then((err) => {
             if (err == null) {
                 navigation.navigate("Sign In")
             } else {
@@ -29,10 +29,10 @@ const ProfileTab = ({ navigation }) => {
         <Header hr title="Your profile"/>
         <ScrollView>
             <View style={styles.profilePreview}>
-            <Text style={styles.userName}>Welcome, {user.name}</Text>
+            <Text style={styles.userName}>Welcome, {currentUser.name}</Text>
             {/* TODO: Implement BlurHash Placeholders */}
             <Image
-                source={{ uri: user.picture }}
+                source={{ uri: currentUser.picture }}
                 style={styles.avatar}
             />
             </View>

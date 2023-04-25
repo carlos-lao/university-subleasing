@@ -13,7 +13,7 @@ import { TextInput } from '../../Misc/Inputs';
 import { Header } from '../../Misc/System';
 import { Container, KeyboardDismisser } from '../../Misc/Templates';
 import { colors, font, dimensions } from '../../../../assets/style-guide';
-import { account } from '../../../util';
+import { user } from '../../../util';
 
 const SignIn = ({ navigation }) => {
   const [loginInfo, setLogInInfo] = useState({
@@ -29,7 +29,7 @@ const SignIn = ({ navigation }) => {
       return
     }
 
-    account.signIn(email, password).then((err) => {
+    user.signIn(email, password).then((err) => {
       if (err == null) {
         navigation.navigate("Profile")
       } else if (err === "unconfirmed") {

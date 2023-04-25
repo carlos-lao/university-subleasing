@@ -1,12 +1,11 @@
 // external imports
 import { Auth, Storage } from 'aws-amplify';
 import { DataStore } from "@aws-amplify/datastore";
-import { User } from '../models';
+import { User, Like } from '../models';
 import uuid from 'react-native-uuid';
 
 // internal imports
-import { convertToAWSDate } from './util';
-import { store, setCurrentUser, resetCurrentUser } from '../store';
+import { store, setCurrentUser, resetCurrentUser, addLike, clearLikes } from '../store';
 
 // users must be at least 18
 export const getMinBirthdate = () => (new Date((new Date()).getFullYear()-18, (new Date()).getMonth(), (new Date()).getDate()));
@@ -62,11 +61,11 @@ export const signUp = async ({ imageURI, name, birthdate, gender, email, passwor
         "name": name,
         "email": email,
         "picture": imageFilename,
-        "posts": [],
-        "comments": [],
-        "likes": [],
         "gender": gender,
-        "birthDate": birthdate.toISOString().slice(0, 10)
+        "birthDate": birthdate.toISOString().slice(0, 10),
+        "listings": [],
+        "comments": [],
+        "likedListings": [],
       })
     );
   } catch (e) {
@@ -84,10 +83,19 @@ export const confirmSignUp = async (email, code) => {
 
 export const signIn = async (email, password) => {
   try {
-    const {attributes} = await Auth.signIn(email, password)
-    const profilePicture = await Storage.get(attributes.picture)
-    const users = await DataStore.query(User, u => u.email.eq(email));
-    store.dispatch(setCurrentUser({...attributes, picture: profilePicture, id: users[0].id}))
+    await Auth.signIn(email, password)
+    const results = await DataStore.query(User, u => 
+      u.email.eq(email)
+    )
+    const user = (({ _deleted, _lastChangedAt, _version, ...remainder}) => (remainder))(results[0])
+    const profilePicture = await Storage.get(user.picture)
+    const likes = await DataStore.query(Like, l => 
+      l.userId.eq(user.id)
+    )
+    likes.forEach((like) => {
+      store.dispatch(addLike(like.listingId))
+    })
+    store.dispatch(setCurrentUser({...user, picture: profilePicture}))
   } catch (e) {
     if (e.name == "UserNotConfirmedException") {
       return "unconfirmed";
@@ -99,9 +107,19 @@ export const signIn = async (email, password) => {
 export const signOut = async () => {
   try {
     await Auth.signOut();
-    DataStore.clear();
+    store.dispatch(clearLikes())
     store.dispatch(resetCurrentUser())
   } catch (e) {
     return e.message;
+  }
+}
+
+export const getUserWithId = async (id) => {
+  try {
+    const users = await DataStore.query(User, u => u.id.eq(id))
+    const photo = await Storage.get(users[0].picture)
+    return { ...users[0], picture: photo }
+  }  catch (e) {
+    console.log(e.message)
   }
 }

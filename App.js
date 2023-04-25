@@ -12,11 +12,12 @@ import { StackNavigator } from './src/components/Navigation';
 import { store } from './src/store';
 
 Amplify.configure(awsconfig)
+// Amplify.Logger.LOG_LEVEL = 'DEBUG'
 
 export default function App() {
   return (
     <Provider store={store}>
-      <StatusBar barStyle='dark-content'/>
+      <StatusBar style="dark"/>
       <SafeAreaProvider>
         <NavigationContainer>
           <StackNavigator />

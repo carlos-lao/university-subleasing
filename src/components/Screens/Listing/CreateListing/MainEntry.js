@@ -9,20 +9,18 @@ import { colors, font, dimensions } from '../../../../../assets/style-guide';
 import { TextInput, Dropdown } from '../../../Misc/Inputs';
 import { Button } from '../../../Misc/Pressables';
 
-const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, setShowCalendar, leaseStart, leaseEnd}) => {
+const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, setShowCalendar, leaseStart, leaseEnd }) => {
     // TODO: add field validation
     const { bottom } = useSafeAreaInsets();
-
-    const [enableKeyboardAvoiding, setEnableKeyboardAvoiding] = useState(false);
     const [showDropdown, setShowDropdown] = useState({
         first: false,
         second: false
     });
-    const [listingInfo, setListingInfo] = useState((({ perks, images, description, start, end, ...picked }) => (picked))(value))
-    const [leasePeriod, setLeasePeriod] = useState({ start: leaseStart, end: leaseEnd })
+    const [listingInfo, setListingInfo] = useState((({ perks, images, description, startDate, endDate, ...picked }) => (picked))(value))
+    const [leasePeriod, setLeasePeriod] = useState({ startDate: leaseStart, endDate: leaseEnd })
 
     useEffect(() => {
-        setLeasePeriod({ start: leaseStart, end: leaseEnd })
+        setLeasePeriod({ startDate: leaseStart, endDate: leaseEnd })
     }, [leaseStart, leaseEnd])
 
     useEffect(() => {
@@ -42,27 +40,23 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                     showCalendar && { borderColor: colors.black }
                 ]}
                 onPress={() => {
-                    setLeasePeriod({start: null, end: null})
+                    setLeasePeriod({startDate: null, endDate: null})
                     setShowCalendar(true);
                 }}
             >
                 <Text style={styles.dateLabel}>Lease Duration</Text>
                 <Text
-                    style={[styles.dateDisplay, leasePeriod.start && { color: colors.black }]}
+                    style={[styles.dateDisplay, leasePeriod.startDate && { color: colors.black }]}
                 >
-                    {getDateString(leasePeriod.start) || "Start Date"}
-                    {leasePeriod.end ? ` – ${getDateString(leasePeriod.end)}` : " – End Date"}</Text>
+                    {getDateString(leasePeriod.startDate) || "Start Date"}
+                    {leasePeriod.endDate ? ` – ${getDateString(leasePeriod.endDate)}` : " – End Date"}</Text>
             </Pressable>
         );
     };
 
 
     return (
-        <Animated.View
-            style={{ opacity: opacity }}
-            onStartShouldSetResponder={() => true}
-        >
-            <KeyboardAvoidingView behavior='position' enabled={enableKeyboardAvoiding}>
+        <Animated.View style={{ opacity: opacity }} onStartShouldSetResponder={() => true}>
                 <Text style={styles.infoHeader}>Listing Information</Text>
                 {/* Title Input */}
                 <TextInput
@@ -140,8 +134,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                         if (text.length <= 5)
                             setListingInfo({ ...listingInfo, campus: text })
                     }}
-                    onFocus={() => setEnableKeyboardAvoiding(true)}
-                    onBlur={() => setEnableKeyboardAvoiding(false)}
                 />
                 <TextInput
                     style={styles.input}
@@ -153,8 +145,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                             setListingInfo({ ...listingInfo, address: { ...address, street: text } });
                         }
                     }}
-                    onFocus={() => setEnableKeyboardAvoiding(true)}
-                    onBlur={() => setEnableKeyboardAvoiding(false)}
                 />
                 <View style={{ flexDirection: 'row' }}>
                     <TextInput
@@ -167,8 +157,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                                 setListingInfo({ ...listingInfo, address: { ...address, city: text } });
                             }
                         }}
-                        onFocus={() => setEnableKeyboardAvoiding(true)}
-                        onBlur={() => setEnableKeyboardAvoiding(false)}
                     />
                     <TextInput
                         style={[styles.input, { flex: 1, marginHorizontal: 10 }]}
@@ -180,8 +168,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                                 setListingInfo({ ...listingInfo, address: { ...address, state: text.toUpperCase() } });
                             }
                         }}
-                        onFocus={() => setEnableKeyboardAvoiding(true)}
-                        onBlur={() => setEnableKeyboardAvoiding(false)}
                     />
                     <TextInput
                         style={[styles.input, { flex: 2 }]}
@@ -193,8 +179,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                                 setListingInfo({ ...listingInfo, address: { ...address, zip: text } });
                             }
                         }}
-                        onFocus={() => setEnableKeyboardAvoiding(true)}
-                        onBlur={() => setEnableKeyboardAvoiding(false)}
                     />
                 </View>
                 
@@ -204,7 +188,6 @@ const MainEntry = ({ opacity, value, onSubmit, propagateChanges, showCalendar, s
                     title="Next"
                     onPress={onSubmit}
                 />
-            </KeyboardAvoidingView>
         </Animated.View>
     )
 }
@@ -255,4 +238,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#C0C0C0'
     },
+    keyboardAvoidingView: {
+        paddingBottom: 100
+    }
 })

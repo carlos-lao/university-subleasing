@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 const ICON_SIZE = 35;
 
 const TabNavigator = () => {
-  const user = useSelector((state) => (state.user))
+  const currentUser = useSelector(({ user }) => (user))
 
   return (
     <Tab.Navigator 
@@ -44,8 +44,8 @@ const TabNavigator = () => {
         )}}
       />
       <Tab.Screen
-        name={user ? "Profile" : "Sign In"}
-        component={user ? ProfileTab : SignInTab}
+        name={currentUser ? "Profile" : "Sign In"}
+        component={currentUser ? ProfileTab : SignInTab}
         options={{ tabBarIcon: ({ color }) => (
           <Icon name="account-outline" size={ICON_SIZE} color={color}/>
         )}}

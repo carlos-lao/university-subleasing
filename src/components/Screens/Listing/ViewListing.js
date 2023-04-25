@@ -18,9 +18,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ROOM_TYPES, PROPERTY_TYPES, MONTHS } from '../../../util/constants';
 import { colors, font } from '../../../../assets/style-guide';
 import { Swiper, LocationView } from '../../Misc/Displays'
-// import { CustomSwiper, LocationView } from '../Subviews';
 import { Button, BackButton } from '../../Misc/Pressables';
-import { listing } from '../../../util';
+import { user, listing } from '../../../util';
 
 const initialModalState = {
     visible: false,
@@ -32,10 +31,10 @@ const TOP_BAR_ICON_SIZE = 25
 const ANIMATION_TIME = 250
 
 const ListingView = ({ navigation, route }) => {
-    const { postPreview, listingInfo } = route.params
+    const { preview, listingInfo } = route.params
     const { top, bottom } = useSafeAreaInsets();
 
-    const user = useSelector((state) => (state.user))
+    const [currentUser, likes] = useSelector(({ user, likes }) => ([user, likes]))
 
     const [typeLabels, setTypeLabels] = useState(null);
     const [dates, setDates] = useState(null);
@@ -46,10 +45,11 @@ const ListingView = ({ navigation, route }) => {
     const topBarOpacity = useRef(new Animated.Value(0)).current
 
     useEffect(() => {
-        if (postPreview && user) {
-            setCreatorInfo(user)
-        }
+        setLiked(likes.includes(listingInfo.id))
+    }, [likes])
 
+    // parse type labes and dates to display strings
+    useEffect(() => {
         setTypeLabels(
             {
                 property: PROPERTY_TYPES.find(p => p.value === listingInfo.propertyType).label,
@@ -58,10 +58,21 @@ const ListingView = ({ navigation, route }) => {
         );
         setDates(
             {
-                start: new Date(listingInfo.start),
-                end: new Date(listingInfo.end)
+                start: new Date(listingInfo.startDate),
+                end: new Date(listingInfo.endDate)
             }
         );
+    }, [])
+
+    // load in creator information
+    useEffect(() => {
+        if (listingInfo.creator === currentUser?.id) {
+            setCreatorInfo(currentUser)
+        } else {
+            user.getUserWithId(listingInfo.creator).then((data) =>
+                setCreatorInfo(data)
+            )
+        }
     }, [])
 
     useEffect(() => {
@@ -80,18 +91,18 @@ const ListingView = ({ navigation, route }) => {
     }
 
     const handleButtonPress = () => {
-        if (postPreview) {
-            listing.uploadPost(listingInfo, user).then((err) => {
+        if (preview) {
+            listing.postListing(listingInfo).then((err) => {
                 if (err == null) {
-                    Alert.alert("Success", "Your post has been successfully uploaded. You can view it under 'Active Listings' in your profile.",[
+                    Alert.alert("Success", "Your listing has been successfully posted. You can view it under 'Active Listings' in your profile.", [
                         {
-                            text: 'View Post',
+                            text: 'View Listing',
                             style: 'default',
                             onPress: () => navigation.navigate('Profile'),
                         },
                         {
                             text: 'Dismiss',
-                            style: 'default',
+                            style: 'cancel',
                             onPress: () => navigation.navigate('Explore')
                         }
                     ])
@@ -99,6 +110,24 @@ const ListingView = ({ navigation, route }) => {
                     Alert.alert("Error", err)
                 }
             })
+        }
+    }
+
+    const handleLike = () => {
+        if (currentUser == null) {
+            Alert.alert('Log In to Continue', 'Sorry, you must be logged in to us this feature.', [
+                {
+                  text: 'OK',
+                  style: 'cancel'
+                },
+                {
+                  text: 'Sign In',
+                  style: 'default',
+                  onPress: () => navigation.navigate('Sign In Modal')
+                }
+              ])
+        } else {
+            listing.toggleLikeListing(listingInfo, currentUser)
         }
     }
 
@@ -111,7 +140,7 @@ const ListingView = ({ navigation, route }) => {
                     style={[styles.floatingButton, !topBarVisible && styles.floatingShadow]}
                     onPress={navigation.goBack}
                 />
-                {!postPreview && (
+                {!preview && (
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity
                             onPress={() => {
@@ -127,9 +156,11 @@ const ListingView = ({ navigation, route }) => {
                         >
                             <Icon name='chat-outline' size={TOP_BAR_ICON_SIZE} color={colors.black} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { setLiked(!liked) }} style={[styles.floatingButton, !topBarVisible && styles.floatingShadow]}>
-                            <Icon name={liked ? 'heart' : 'heart-outline'} size={TOP_BAR_ICON_SIZE} color={liked ? colors.lightRed : colors.black} />
-                        </TouchableOpacity>
+                        {listingInfo.creator != currentUser?.id &&
+                            <TouchableOpacity onPress={handleLike} style={[styles.floatingButton, !topBarVisible && styles.floatingShadow]}>
+                                <Icon name={liked ? 'heart' : 'heart-outline'} size={TOP_BAR_ICON_SIZE} color={liked ? colors.lightRed : colors.black} />
+                            </TouchableOpacity>
+                        }
                     </View>
                 )}
             </View>
@@ -146,7 +177,7 @@ const ListingView = ({ navigation, route }) => {
             </View>
             <View style={styles.buttonWrapper}>
                 <Button
-                    title={postPreview ? 'Post Listing' : (creatorInfo?.email === user?.email ? 'Edit Listing' : 'Make an Offer')}
+                    title={preview ? 'Post Listing' : (listingInfo.creator === currentUser?.id ? 'Edit Listing' : 'Make an Offer')}
                     onPress={() => {
                         handleButtonPress();
                     }}
@@ -287,6 +318,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         marginRight: 10,
+        backgroundColor: colors.lightGray,
     },
     description: {
         fontSize: font.medium,

@@ -42,7 +42,7 @@ const LocationView = ({ address, style }) => {
         >
             <Circle 
                 center={coordinates}
-                radius={120}
+                radius={200}
                 fillColor={colors.secondary+'90'}
                 strokeColor={colors.secondary}
                 strokeWidth={3}

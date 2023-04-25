@@ -1,45 +1,39 @@
-type Like @model @auth(rules: [{allow: public}]) {
+type Listing @model @auth(rules: [{allow: public}, {allow: private}]) {
   id: ID!
-  user: ID! @index(name: "byUser")
-  postID: ID! @index(name: "byListing")
-}
-
-type Comment @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  post: ID! @index(name: "byListing")
-  author: ID! @index(name: "byUser")
-  respondingTo: ID
-  content: String!
-}
-
-type User @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  name: String!
-  email: AWSEmail!
-  picture: String!
-  posts: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
-  comments: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
-  likes: [Listing] @hasMany(indexName: "byUser", fields: ["id"])
-  gender: String!
-  birthDate: AWSDate!
-}
-
-type Listing @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  title: String!
   creator: ID! @index(name: "byUser")
+  title: String!
+  description: String!
   roomType: String!
-  campus: String!
-  address: String!
+  propertyType: String!
   rate: Int!
   negotiable: Boolean!
   startDate: AWSDate!
   endDate: AWSDate!
+  campus: String!
+  address: String!
   photoDirectory: String!
   perks: AWSJSON!
-  description: String
-  propertyType: String!
   comments: [Comment] @hasMany(indexName: "byListing", fields: ["id"])
-  likes: [Comment] @hasMany(indexName: "byListing", fields: ["id"])
+  likes: [User] @manyToMany(relationName: "Like")
+}
+
+type Comment @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  respondingTo: ID
+  content: String!
+  author: ID! @index(name: "byUser")
+  listing: ID! @index(name: "byListing")
+}
+
+type User @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  name: String!
+  email: AWSEmail!
+  picture: String!
+  gender: String!
+  birthDate: AWSDate!
+  comments: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
+  listings: [Comment] @hasMany(indexName: "byUser", fields: ["id"])
+  likedListings: [Listing] @manyToMany(relationName: "Like")
 }
  
